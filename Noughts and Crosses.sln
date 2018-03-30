@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Noughts and Crosses", "Noughts and Crosses\Noughts and Crosses.pyproj", "{A41F3299-B28B-4CA9-93BB-5E7A44FCF901}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A41F3299-B28B-4CA9-93BB-5E7A44FCF901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A41F3299-B28B-4CA9-93BB-5E7A44FCF901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B87D2B12-7DE0-41CB-84E0-A043A58F4E4E}
+	EndGlobalSection
+EndGlobal
