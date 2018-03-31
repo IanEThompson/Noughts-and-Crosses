@@ -28,6 +28,7 @@
 #
 #   Would be written as: "XXOX OOX " 
 
+import random
 
 def printBrd(brd):
     """ Outputs the board represented by 'brd' to the screen"""
@@ -114,6 +115,8 @@ def getOMove(brd):
                     newBrd = newBrd + brd[i]
     return newBrd
 
+
+
 def isGameWon(brd):
     """ Check to see if the game has been won:
         Returns winner: 'X', 'O' or 'D' (Draw) or 'N' (no result yet)
@@ -138,7 +141,9 @@ def isGameWon(brd):
     return "N"
 
 def nextMoves(brd):
-    #who's turn is it? (Assuming "X" always goes first)
+    """ Creates a list of all possible next moves
+        Assumes "X" always goes first when determining whose turn it is
+    """
     if brd.count("O") == brd.count("X"):
         player="X"
     else:
@@ -164,19 +169,17 @@ def nextMoves(brd):
 #set up a blank board and an empty gamelist
 board="         "
 GameList={}
-printBrd(board)
 
 #this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
 while True:
-    print("Next Moves: ",','.join(nextMoves(board)))
     board=getXMove(board)
     GameList[board]=0
-    printBrd(board)
+    #printBrd(board)
     if isGameWon(board)!="N":
         break
     
-    print("NextMoves:",','.join(nextMoves(board)))
-    board=getOMove(board)
+    #board=getOMove(board)
+    board=random.choice(nextMoves(board))
     GameList[board]=0
     printBrd(board)
     if isGameWon(board)!="N":
