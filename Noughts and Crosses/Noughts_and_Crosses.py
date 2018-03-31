@@ -31,6 +31,10 @@
 import random       #for choosing random moves
 import collections  #gamelist needs to be an ordered dictionary
 
+X_Experience={}
+O_Experience={}
+
+
 def printBrd(brd):
     """ Outputs the board represented by 'brd' to the screen"""
     print(brd[0],"|",brd[1],"|",brd[2], sep="")
@@ -158,7 +162,7 @@ def rootBoard(brd):
     seqCount=0      #track the number of transforms so far
     tfBrd=brd       #the board after the latest transform
 
-    tfSequence="rrrrfrrrrtrrrrfrrr"
+    tfSequence="rrrrfrrrr"
     
     #execute the next transform in the sequence
     for tf in list(tfSequence):
@@ -179,63 +183,78 @@ def rootBoard(brd):
             rootBrd = tfBrd
     return rootBrd + ":" + tfSequence[:rootSeqCount]
 
+def learnFromGame(Game):
+    """ Remembers the moves that lead to a win in the Xexperience or Oexperience dictionaries
+    """
+    global X_Experience     #use the global experience list for the X player
+    global O_Experience     #use the global experience list for the O player
+    
+    lastBrd = next(reversed(Game))                      #get the last board in the Game to check the result
+    Winner = isGameWon(lastBrd)
+    
+    if Winner == "D":                                   #If the game was a draw, do nothing!
+        return
+
+    if Winner == "X":
+        for g in Game:
+            if g.count("X")>g.count("O"):               #every move of X's was good!
+                if g in X_Experience:
+                    X_Experience[g]=X_Experience[g]+1   #if the move is known, increment vote
+                else:
+                    X_Experience[g]=1                   #else add it into the experience with vote=1
+            
+    if Winner == "O":
+        for g in Game:
+            if g.count("O")==g.count("X"):               #every move of O's was good!
+                if g in O_Experience:
+                    O_Experience[g]=O_Experience[g]+1   #if the move is known, increment vote
+                else:
+                    O_Experience[g]=1                   #else add it into the experience with vote=1
+
 
 # ========================
 # MAIN PROGRAM STARTS HERE
 # ========================
 
-#set up a blank board, an empty gamelist and an empty experience list
-board="         "
-GameList=collections.OrderedDict()
-Experience={}
-printBrd("012345678")
-
-#this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
+#play games over and over
 while True:
-    #human moves
-    board=humanMove(board)
-    GameList[rootBoard(board)[:9]]=0
-    if isGameWon(board)!="N":
-        break
+
+    #set up a blank board, an empty gamelist and an empty experience list
+    board="         "
+    GameList=collections.OrderedDict()
+    printBrd("012345678")
+
+    #this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
+    while True:
+        #human moves
+        board=humanMove(board)
+        GameList[rootBoard(board)[:9]]=0
+        if isGameWon(board)!="N":
+            break
     
-    #computer moves
-    board=random.choice(nextMoves(board))
-    GameList[rootBoard(board)[:9]]=0
+        #computer moves
+        board=random.choice(nextMoves(board))
+        GameList[rootBoard(board)[:9]]=0
+        printBrd(board)
+        if isGameWon(board)!="N":
+            break
+    
+    #when the game is over, declare the winner
     printBrd(board)
-    if isGameWon(board)!="N":
-        break
-    
-#when the game is over, declare the winner
-printBrd(board)
-gameResult = isGameWon(board)
-if gameResult=="D":
-    print("The game was a draw")
-else:
-    print(gameResult, "wins!")
-
-
-# =====================
-# Learn from the game
-# =====================
-
-#If the game was not a draw, assign votes to the GameList
-#Each move by the winning player gets one vote
-if isGameWon(board) != "D":
-    #work out whether to start with a "1" (player one won) or a "0" (player 2 won)
-    if isGameWon(board) == "X":
-        vote=1
+    gameResult = isGameWon(board)
+    if gameResult=="D":
+        print("The game was a draw")
     else:
-        vote=0
-    # then toggle between "1" and "O" along the moves in the GameList
-    for i in GameList:
-        GameList[i]=vote
-        vote=(vote+1)%2
- 
-#Print out the GameList, showing votes
-print("GameList:")
-for i in GameList:
-    print(i," : ",GameList[i])
+        print(gameResult, "wins!")
 
+    learnFromGame(GameList)
 
+    #Print out X_Experience, showing votes
+    print("X Experience:")
+    for x in X_Experience:
+        print(x," : ",X_Experience[x])
 
- 
+    #Print out O_Experience, showing votes
+    print("O Experience:")
+    for x in O_Experience:
+        print(x," : ",O_Experience[x])
