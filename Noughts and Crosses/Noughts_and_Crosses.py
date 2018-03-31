@@ -38,49 +38,6 @@ def printBrd(brd):
     print("-----")
     print(brd[6],"|",brd[7],"|",brd[8], sep="")
 
-def tfRotate(brd):
-    """ Returns a string representing the board rotated once clockwise """
-    newBrd=brd[6] + brd[3] + brd[0] + brd[7] + brd[4] + brd[1] + brd[8]+ brd[5] + brd[2]
-    return newBrd
-
-def tfUnrotate(brd):
-    """ Returns a string representing the board rotated once anti-clockwise """
-    newBrd=brd[2] + brd[5] + brd[8] + brd[1] + brd[4] + brd[7] + brd[0]+ brd[3] + brd[6]
-    return newBrd
-
-def tfFlip(brd):
-    """ Returns a string representing the board flipped (refelcted) about the diagonal"""
-    newBrd=brd[0] + brd[3] + brd[6] + brd[1] + brd[4] + brd[7] + brd[2]+ brd[5] + brd[8]
-    return newBrd
-
-def tfToggle(brd):
-    """ Returns a string representing the board with O and X toggled"""
-    newBrd=""
-    for digit in brd:
-        if digit == 'X':
-            newBrd=newBrd + "O"
-        elif digit == 'O':
-            newBrd=newBrd + "X"
-        else:
-            newBrd=newBrd + " "
-    return newBrd
-
-def tfInt(brd):
-    """Returns the board as an int with
-        empty = 0
-            O = 1
-            X = 2
-    """
-    newBrd=""
-    for digit in brd:
-        if digit == 'X':
-            newBrd=newBrd + "2"
-        elif digit == 'O':
-            newBrd=newBrd + "1"
-        else:
-            newBrd=newBrd + " "
-    return newBrd
-
 def humanMove(brd):
     """ Gets the human's next move using the screen and keyboard """
     #determine which player is moving (assume X always moves first)
@@ -149,6 +106,77 @@ def nextMoves(brd):
             nextMoveList.append(newBrd)
     return nextMoveList
 
+def tfRotate(brd):
+    """ Returns a string representing the board rotated once clockwise """
+    newBrd=brd[6] + brd[3] + brd[0] + brd[7] + brd[4] + brd[1] + brd[8]+ brd[5] + brd[2]
+    return newBrd
+
+def tfUnrotate(brd):
+    """ Returns a string representing the board rotated once anti-clockwise """
+    newBrd=brd[2] + brd[5] + brd[8] + brd[1] + brd[4] + brd[7] + brd[0]+ brd[3] + brd[6]
+    return newBrd
+
+def tfFlip(brd):
+    """ Returns a string representing the board flipped (refelcted) about the diagonal"""
+    newBrd=brd[0] + brd[3] + brd[6] + brd[1] + brd[4] + brd[7] + brd[2]+ brd[5] + brd[8]
+    return newBrd
+
+def tfToggle(brd):
+    """ Returns a string representing the board with O and X toggled"""
+    newBrd=""
+    for digit in brd:
+        if digit == 'X':
+            newBrd=newBrd + "O"
+        elif digit == 'O':
+            newBrd=newBrd + "X"
+        else:
+            newBrd=newBrd + " "
+    return newBrd
+
+def tfInt(brd):
+    """Returns the board as an int with
+        empty = 0
+            O = 1
+            X = 2
+    """
+    newBrd=""
+    for digit in brd:
+        if digit == 'X':
+            newBrd=newBrd + "2"
+        elif digit == 'O':
+            newBrd=newBrd + "1"
+        else:
+            newBrd=newBrd + " "
+    return newBrd
+
+def rootBoard(brd):
+    """ Returns a string representing a unique 'root' board and the transforms required to 
+        get from the input board to the root board.
+    """
+    rootScore=0     #the "score" of the highest scoring board
+    seqCount=0      #track the number of transforms so far
+    tfBrd=brd       #the board after the latest transform
+
+    tfSequence="rrrrfrrrrtrrrrfrrr"
+    
+    #execute the next transform in the sequence
+    for tf in list(tfSequence):
+        if tf=="r":
+            tfBrd=tfRotate(tfBrd)
+        elif tf=="f":
+            tfBrd=tfFlip(tfBrd)
+        elif tf=="t":
+            tfBrd=tfToggle(tfBrd)
+        seqCount = seqCount + 1
+
+        #score the transformed board by converting it into an integer
+        Score = int(tfBrd.replace("X","2").replace("O","1").replace(" ","0"))
+        #remember the best scoring board AND the number of transforms required to get to it
+        if Score > rootScore:
+            rootSeqCount = seqCount
+            rootScore = Score
+            rootBrd = tfBrd
+    return rootBrd + ":" + tfSequence[:rootSeqCount]
 
 # ========================
 # MAIN PROGRAM STARTS HERE
@@ -161,15 +189,15 @@ printBrd("012345678")
 
 #this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
 while True:
+    #human moves
     board=humanMove(board)
-    GameList[board]=0
-    #printBrd(board)
+    GameList[rootBoard(board)[:9]]=0
     if isGameWon(board)!="N":
         break
     
-    #board=getOMove(board)
+    #computer moves
     board=random.choice(nextMoves(board))
-    GameList[board]=0
+    GameList[rootBoard(board)[:9]]=0
     printBrd(board)
     if isGameWon(board)!="N":
         break
