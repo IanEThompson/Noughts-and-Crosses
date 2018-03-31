@@ -237,12 +237,26 @@ def learnFromGame(Game):
                 else:
                     X_Experience[g]=-1                  #else add it into the experience with vote=-11
 
+def printExperience():
+
+    #Print out X_Experience, showing votes
+    print("X Experience:")
+    for x in X_Experience:
+        print(x," : ",X_Experience[x])
+
+    #Print out O_Experience, showing votes
+    print("O Experience:")
+    for x in O_Experience:
+        print(x," : ",O_Experience[x])
+    print("")
+
+
 # ========================
 # MAIN PROGRAM STARTS HERE
 # ========================
 
-X_Experience={"XXXXXXXXX":0}
-O_Experience={"XXXXXXXXX":0}
+X_Experience={}
+O_Experience={}
 
 #play games over and over
 while True:
@@ -254,6 +268,7 @@ while True:
 
     #this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
     while True:
+
         #human's move:
         board=humanMove(board)
         GameList[rootBoard(board)]=0
@@ -270,20 +285,15 @@ while True:
     
     #when the game is over, declare the winner
     printBrd(board)
+    print("")
     gameResult = isGameWon(board)
     if gameResult=="D":
         print("The game was a draw")
     else:
         print(gameResult, "wins!")
 
+    print("")
     learnFromGame(GameList)
 
-    #Print out X_Experience, showing votes
-    print("X Experience:")
-    for x in X_Experience:
-        print(x," : ",X_Experience[x])
 
-    #Print out O_Experience, showing votes
-    print("O Experience:")
-    for x in O_Experience:
-        print(x," : ",O_Experience[x])
+    printExperience()
