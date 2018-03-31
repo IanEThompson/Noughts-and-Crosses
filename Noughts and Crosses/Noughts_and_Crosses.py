@@ -28,7 +28,8 @@
 #
 #   Would be written as: "XXOX OOX " 
 
-import random
+import random       #for choosing random moves
+import collections  #gamelist needs to be an ordered dictionary
 
 def printBrd(brd):
     """ Outputs the board represented by 'brd' to the screen"""
@@ -178,13 +179,15 @@ def rootBoard(brd):
             rootBrd = tfBrd
     return rootBrd + ":" + tfSequence[:rootSeqCount]
 
+
 # ========================
 # MAIN PROGRAM STARTS HERE
 # ========================
 
-#set up a blank board and an empty gamelist
+#set up a blank board, an empty gamelist and an empty experience list
 board="         "
-GameList={}
+GameList=collections.OrderedDict()
+Experience={}
 printBrd("012345678")
 
 #this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
@@ -210,6 +213,11 @@ if gameResult=="D":
 else:
     print(gameResult, "wins!")
 
+
+# =====================
+# Learn from the game
+# =====================
+
 #If the game was not a draw, assign votes to the GameList
 #Each move by the winning player gets one vote
 if isGameWon(board) != "D":
@@ -222,9 +230,12 @@ if isGameWon(board) != "D":
     for i in GameList:
         GameList[i]=vote
         vote=(vote+1)%2
-
+ 
 #Print out the GameList, showing votes
 print("GameList:")
 for i in GameList:
     print(i," : ",GameList[i])
 
+
+
+ 
