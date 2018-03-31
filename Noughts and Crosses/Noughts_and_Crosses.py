@@ -81,11 +81,18 @@ def tfInt(brd):
             newBrd=newBrd + " "
     return newBrd
 
-def getXMove(brd):
+def humanMove(brd):
+    """ Gets the human's next move using the screen and keyboard """
+    #determine which player is moving (assume X always moves first)
+    if brd.count("O") == brd.count("X"):
+        player="X"
+    else:
+        player="O"
+
     newBrd=""
     validMove=False
     while not validMove:
-        strMove = input("Player 1 (X) enter your move 0-8:" )
+        strMove = input("What is your move? (0-8): ")
         move=int(strMove[0])
         if move<0 or move>8 or brd[move] != " ":
             print("Invalid move")
@@ -93,29 +100,10 @@ def getXMove(brd):
             validMove=True
             for i in range(0,9):
                 if i == move:
-                    newBrd=newBrd + "X"
+                    newBrd=newBrd + player
                 else:
                     newBrd = newBrd + brd[i]
     return newBrd
-
-def getOMove(brd):
-    newBrd=""
-    validMove=False
-    while not validMove:
-        strMove = input("Player 2 (O) enter your move 0-8:" )
-        move=int(strMove[0])
-        if move<0 or move>8 or brd[move] != " ":
-            print("Invalid move")
-        else:
-            validMove=True
-            for i in range(0,9):
-                if i == move:
-                    newBrd=newBrd + "O"
-                else:
-                    newBrd = newBrd + brd[i]
-    return newBrd
-
-
 
 def isGameWon(brd):
     """ Check to see if the game has been won:
@@ -169,10 +157,11 @@ def nextMoves(brd):
 #set up a blank board and an empty gamelist
 board="         "
 GameList={}
+printBrd("012345678")
 
 #this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
 while True:
-    board=getXMove(board)
+    board=humanMove(board)
     GameList[board]=0
     #printBrd(board)
     if isGameWon(board)!="N":
@@ -186,6 +175,7 @@ while True:
         break
     
 #when the game is over, declare the winner
+printBrd(board)
 gameResult = isGameWon(board)
 if gameResult=="D":
     print("The game was a draw")
