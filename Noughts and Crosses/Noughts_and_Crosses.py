@@ -31,10 +31,6 @@
 import random       #for choosing random moves
 import collections  #gamelist needs to be an ordered dictionary
 
-X_Experience={}
-O_Experience={}
-
-
 def printBrd(brd):
     """ Outputs the board represented by 'brd' to the screen"""
     print(brd[0],"|",brd[1],"|",brd[2], sep="")
@@ -155,8 +151,7 @@ def tfInt(brd):
     return newBrd
 
 def rootBoard(brd):
-    """ Returns a string representing a unique 'root' board and the transforms required to 
-        get from the input board to the root board.
+    """ Returns a string representing a unique 'root' board for the given board
     """
     rootScore=0     #the "score" of the highest scoring board
     seqCount=0      #track the number of transforms so far
@@ -170,18 +165,36 @@ def rootBoard(brd):
             tfBrd=tfRotate(tfBrd)
         elif tf=="f":
             tfBrd=tfFlip(tfBrd)
-        elif tf=="t":
-            tfBrd=tfToggle(tfBrd)
-        seqCount = seqCount + 1
 
         #score the transformed board by converting it into an integer
         Score = int(tfBrd.replace("X","2").replace("O","1").replace(" ","0"))
         #remember the best scoring board AND the number of transforms required to get to it
         if Score > rootScore:
-            rootSeqCount = seqCount
             rootScore = Score
             rootBrd = tfBrd
-    return rootBrd + ":" + tfSequence[:rootSeqCount]
+    return rootBrd
+
+def findBestMove(brd):
+    maxVotes=0
+    bestMove=random.choice(nextMoves(board))
+    
+    if brd.count("O")<brd.count("X"):                           #if it's O's move
+        for m in nextMoves(brd):
+            if rootBoard(m) in O_Experience:                    #look for the best move in the experience list
+                if O_Experience[rootBoard(m)] > maxVotes:
+                    bestMove=m
+                    maxVotes = O_Experience[rootBoard(m)]
+        return bestMove
+
+    if brd.count("X")==brd.count("O"):                           #if it's X's move
+        for m in nextMoves(brd):
+            if rootBoard(m) in X_Experience:                     #look for the best move in the experience list
+                if X_Experience(rootBoard(m)) > maxVotes:
+                    bestMove=m
+                    maxVotes = X_Experience[rootBoard(m)]
+        return bestMove
+
+
 
 def learnFromGame(Game):
     """ Remembers the moves that lead to a win in the Xexperience or Oexperience dictionaries
@@ -203,6 +216,13 @@ def learnFromGame(Game):
                 else:
                     X_Experience[g]=1                   #else add it into the experience with vote=1
             
+            else:                                       #every move of O's was bad!
+                if g in O_Experience:
+                    O_Experience[g]=O_Experience[g]-1   #if the move is known, decrement vote
+                else:
+                    O_Experience[g]=-1                  #else add it into the experience with vote=-11
+
+
     if Winner == "O":
         for g in Game:
             if g.count("O")==g.count("X"):               #every move of O's was good!
@@ -210,11 +230,19 @@ def learnFromGame(Game):
                     O_Experience[g]=O_Experience[g]+1   #if the move is known, increment vote
                 else:
                     O_Experience[g]=1                   #else add it into the experience with vote=1
-
+            
+            else:                                       #every move of X's was bad!
+                if g in X_Experience:
+                    X_Experience[g]=X_Experience[g]-1   #if the move is known, decrement vote
+                else:
+                    X_Experience[g]=-1                  #else add it into the experience with vote=-11
 
 # ========================
 # MAIN PROGRAM STARTS HERE
 # ========================
+
+X_Experience={"XXXXXXXXX":0}
+O_Experience={"XXXXXXXXX":0}
 
 #play games over and over
 while True:
@@ -226,15 +254,16 @@ while True:
 
     #this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
     while True:
-        #human moves
+        #human's move:
         board=humanMove(board)
-        GameList[rootBoard(board)[:9]]=0
+        GameList[rootBoard(board)]=0
         if isGameWon(board)!="N":
             break
     
-        #computer moves
-        board=random.choice(nextMoves(board))
-        GameList[rootBoard(board)[:9]]=0
+        #computer's move:
+        #board=random.choice(nextMoves(board))
+        board=findBestMove(board)
+        GameList[rootBoard(board)]=0
         printBrd(board)
         if isGameWon(board)!="N":
             break
