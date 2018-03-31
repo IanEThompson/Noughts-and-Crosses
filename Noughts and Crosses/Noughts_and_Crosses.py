@@ -50,6 +50,7 @@ def humanMove(brd):
     newBrd=""
     validMove=False
     while not validMove:
+        print("You are ", player)
         strMove = input("What is your move? (0-8): ")
         move=int(strMove[0])
         if move<0 or move>8 or brd[move] != " ":
@@ -189,7 +190,7 @@ def findBestMove(brd):
     if brd.count("X")==brd.count("O"):                           #if it's X's move
         for m in nextMoves(brd):
             if rootBoard(m) in X_Experience:                     #look for the best move in the experience list
-                if X_Experience(rootBoard(m)) > maxVotes:
+                if X_Experience[rootBoard(m)] > maxVotes:
                     bestMove=m
                     maxVotes = X_Experience[rootBoard(m)]
         return bestMove
@@ -257,43 +258,46 @@ def printExperience():
 
 X_Experience={}
 O_Experience={}
+computersTurn=False
 
 #play games over and over
 while True:
 
-    #set up a blank board, an empty gamelist and an empty experience list
+    #Initialise the game
     board="         "
     GameList=collections.OrderedDict()
     printBrd("012345678")
+    
+    if computersTurn:
+        print("\nMy turn to go first!")
 
     #this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
     while True:
+        
+        if computersTurn:
+            board=findBestMove(board)       #find the best move (based on experience)
+            printBrd(board)                 #display the move
+            computersTurn=False             #computers turn is over
 
-        #human's move:
-        board=humanMove(board)
-        GameList[rootBoard(board)]=0
-        if isGameWon(board)!="N":
-            break
-    
-        #computer's move:
-        #board=random.choice(nextMoves(board))
-        board=findBestMove(board)
-        GameList[rootBoard(board)]=0
-        printBrd(board)
-        if isGameWon(board)!="N":
-            break
+        else:
+            board=humanMove(board)          #get the human's move
+            computersTurn=True              #human's move is over
+
+        GameList[rootBoard(board)]=0        #record the move (for analysis later)
+        if isGameWon(board)!="N":           #check to see if the game is over
+            break    
     
     #when the game is over, declare the winner
-    printBrd(board)
     print("")
     gameResult = isGameWon(board)
     if gameResult=="D":
         print("The game was a draw")
     else:
+        if computersTurn==True:              #if the human won, the board still needs to be displayed
+            printBrd(board)
         print(gameResult, "wins!")
 
     print("")
-    learnFromGame(GameList)
+    learnFromGame(GameList)                 #remember all the moves from the game for next time!
 
-
-    printExperience()
+    #printExperience()                       #display the experience lists (optional)
