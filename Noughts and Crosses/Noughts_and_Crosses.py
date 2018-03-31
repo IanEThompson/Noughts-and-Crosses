@@ -269,7 +269,9 @@ while True:
     printBrd("012345678")
     
     if computersTurn:
-        print("\nMy turn to go first!")
+        print("\nStep aside human, I'm going first!")
+    else:
+        print("\nYou can go first")
 
     #this is the main gaim loop. Break from the loop with the game if NOT "No result yet (N)" ie: when there is a result
     while True:
