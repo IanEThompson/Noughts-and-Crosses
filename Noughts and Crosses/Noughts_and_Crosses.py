@@ -5,8 +5,17 @@
 #   Ian Thompson 2018
 #   0414270210  ianmelandkids@gmail.com
 #   
-#   Plays noughts and crosses. Currently between two players
-#   but will eventually be between a human and a "learning" computer
+#   Plays noughts and crosses.
+#   
+#   The computer starts out completely "dumb"; it plays by the rules but has
+#   no clue how to win or lose.
+#   But over time, it builds up two "experience" lists, which are essentially
+#   lists of "boards" (simplified so equivalent boards are combined), with votes
+#   saying whether that board is a good board (led to a win) or a bad board
+#   (led to a loss), and makes decisions using that experience.
+#
+#   After a dozen or so games, it starts to play reasonably smart, and eventually 
+#   becomes quite difficult, if not impossible to defeat. 
 #
 #   The board is represented by a string of exactly nine characters.
 #   Each character represents a particular position on the board:
@@ -181,15 +190,19 @@ def findBestMove(brd):
     
     if brd.count("O")<brd.count("X"):                           #if it's O's move
         for m in nextMoves(brd):
-            if rootBoard(m) in O_Experience:                    #look for the best move in the experience list
+            if isGameWon(m)=="O":                                    #if the move results in a win, just take it!
+                return m
+            if rootBoard(m) in O_Experience:                    #otherwise look for the best move in the experience list
                 if O_Experience[rootBoard(m)] > maxVotes:
                     bestMove=m
                     maxVotes = O_Experience[rootBoard(m)]
         return bestMove
 
-    if brd.count("X")==brd.count("O"):                           #if it's X's move
+    if brd.count("X")==brd.count("O"):                          #if it's X's move
         for m in nextMoves(brd):
-            if rootBoard(m) in X_Experience:                     #look for the best move in the experience list
+            if isGameWon(m)=="X":                                    #if the move results in a win, just take it!
+                return m
+            if rootBoard(m) in X_Experience:                    #otherwise look for the best move in the experience list
                 if X_Experience[rootBoard(m)] > maxVotes:
                     bestMove=m
                     maxVotes = X_Experience[rootBoard(m)]
@@ -258,6 +271,7 @@ def printExperience():
 
 X_Experience={}
 O_Experience={}
+gameCount=0
 computersTurn=False
 
 #play games over and over
@@ -301,5 +315,7 @@ while True:
 
     print("")
     learnFromGame(GameList)                 #remember all the moves from the game for next time!
+    gameCount = gameCount + 1
+    print("Game Count = ", gameCount)       #how many games have been played?
 
     #printExperience()                       #display the experience lists (optional)
