@@ -218,38 +218,50 @@ def learnFromGame(Game):
     
     lastBrd = next(reversed(Game))                      #get the last board in the Game to check the result
     Winner = isGameWon(lastBrd)
-    
-    if Winner == "D":                                   #If the game was a draw, do nothing!
-        return
 
     if Winner == "X":
         for g in Game:
             if g.count("X")>g.count("O"):               #every move of X's was good!
                 if g in X_Experience:
-                    X_Experience[g]=X_Experience[g]+1   #if the move is known, increment vote
+                    X_Experience[g]=X_Experience[g]+2   #if the move is known, increment vote by 2
                 else:
-                    X_Experience[g]=1                   #else add it into the experience with vote=1
-            
+                    X_Experience[g]=2                   #else add it into the experience with vote=2
+          
             else:                                       #every move of O's was bad!
                 if g in O_Experience:
-                    O_Experience[g]=O_Experience[g]-1   #if the move is known, decrement vote
+                    O_Experience[g]=O_Experience[g]-2   #if the move is known, decrement vote by 2
                 else:
-                    O_Experience[g]=-1                  #else add it into the experience with vote=-11
-
+                    O_Experience[g]=-2                  #else add it into the experience with vote=-2
 
     if Winner == "O":
         for g in Game:
             if g.count("O")==g.count("X"):               #every move of O's was good!
                 if g in O_Experience:
-                    O_Experience[g]=O_Experience[g]+1   #if the move is known, increment vote
+                    O_Experience[g]=O_Experience[g]+2   #if the move is known, increment vote by 2
                 else:
-                    O_Experience[g]=1                   #else add it into the experience with vote=1
+                    O_Experience[g]=2                   #else add it into the experience with vote=2
             
             else:                                       #every move of X's was bad!
                 if g in X_Experience:
-                    X_Experience[g]=X_Experience[g]-1   #if the move is known, decrement vote
+                    X_Experience[g]=X_Experience[g]-2   #if the move is known, decrement vote
                 else:
-                    X_Experience[g]=-1                  #else add it into the experience with vote=-11
+                    X_Experience[g]=-2                  #else add it into the experience with vote=-2
+
+
+    if Winner == "D":                                   #If the game was a draw, that's better than 'unknown', so
+        for g in Game:
+            if g.count("X")>g.count("O"):               #every move of X's was not great, but 'ok'!
+                if g in X_Experience:
+                    X_Experience[g]=X_Experience[g]+1   #if the move is known, increment vote by just 1
+                else:
+                    X_Experience[g]=1                   #else add it into the experience with vote=1
+
+            else:                                       #every move of O's was also not great, but 'ok'!
+                if g in O_Experience:
+                    O_Experience[g]=O_Experience[g]+1   #if the move is known, increment vote by just 1
+                else:
+                    O_Experience[g]=1                   #else add it into the experience with vote=1
+
 
 def printExperience():
 
