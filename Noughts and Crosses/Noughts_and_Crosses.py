@@ -192,7 +192,7 @@ def findBestMove(brd):
         for m in nextMoves(brd):
             if isGameWon(m)=="O":                                    #if the move results in a win, just take it!
                 return m
-            if rootBoard(m) in O_Experience:                    #otherwise look for the best move in the experience list
+            if rootBoard(m) in O_Experience:                    #otherwise look for the best move in the0 experience list
                 if O_Experience[rootBoard(m)] > maxVotes:
                     bestMove=m
                     maxVotes = O_Experience[rootBoard(m)]
@@ -251,17 +251,12 @@ def learnFromGame(Game):
     if Winner == "D":                                   #If the game was a draw, that's better than 'unknown', so
         for g in Game:
             if g.count("X")>g.count("O"):               #every move of X's was not great, but 'ok'!
-                if g in X_Experience:
-                    X_Experience[g]=X_Experience[g]+1   #if the move is known, increment vote by just 1
-                else:
-                    X_Experience[g]=1                   #else add it into the experience with vote=1
+                if g not in X_Experience:
+                    X_Experience[g]=1                   #add it into the experience with vote=1
 
             else:                                       #every move of O's was also not great, but 'ok'!
                 if g in O_Experience:
-                    O_Experience[g]=O_Experience[g]+1   #if the move is known, increment vote by just 1
-                else:
                     O_Experience[g]=1                   #else add it into the experience with vote=1
-
 
 def printExperience():
 
@@ -330,4 +325,4 @@ while True:
     gameCount = gameCount + 1
     print("Game Count = ", gameCount)       #how many games have been played?
 
-    #printExperience()                       #display the experience lists (optional)
+    #printExperience()                       #display the experience lists (optional - uncomment if wanted)
