@@ -5,17 +5,18 @@
 #   Ian Thompson 2018
 #   0414270210  ianmelandkids@gmail.com
 #   
-#   Plays noughts and crosses.
+#   Plays noughts and crosses using a simple machine learning algorithm.
 #   
 #   The computer starts out completely "dumb"; it plays by the rules but has
-#   no clue how to win or lose.
+#   no clue how to win or lose. (except it can regonise a 'next move win' opportunity).
+#
 #   But over time, it builds up two "experience" lists, which are essentially
 #   lists of "boards" (simplified so equivalent boards are combined), with votes
 #   saying whether that board is a good board (led to a win) or a bad board
 #   (led to a loss), and makes decisions using that experience.
 #
 #   After a dozen or so games, it starts to play reasonably smart, and eventually 
-#   becomes quite difficult, if not impossible to defeat. 
+#   becomes quite difficult, if not impossible to defeat.
 #
 #   The board is represented by a string of exactly nine characters.
 #   Each character represents a particular position on the board:
@@ -50,7 +51,7 @@ def printBrd(brd):
 
 def humanMove(brd):
     """ Gets the human's next move using the screen and keyboard """
-    #determine which player is moving (assume X always moves first)
+    #determine which player is moving (X always moves first)
     if brd.count("O") == brd.count("X"):
         player="X"
     else:
@@ -58,22 +59,22 @@ def humanMove(brd):
 
     newBrd=""
     validMove=False
-    while not validMove:
+    while not validMove:                                                #keep looping until valid move
         print("You are ", player, end=". ")
         strMove = input("What is your move? (0-8): ")
-        try:
+        try:                                                            #try converting to an int
             move=int(strMove[0])
-            if move<0 or move>8 or brd[move] != " ":
+            if move<0 or move>8 or brd[move] != " ":                    #move in correct range and not a square already taken?
                 print("Invalid move - enter a move between 0 and 8:")
                 printBrd("012345678")
             else:
                 validMove=True
-                for i in range(0,9):
+                for i in range(0,9):                                    #if valid int, add the move to the board
                     if i == move:
                         newBrd=newBrd + player
                     else:
                         newBrd = newBrd + brd[i]
-        except:
+        except:                                                         #do this if the input wasn't an int
             if strMove=='x':
                 printExperience()
             else:
@@ -169,7 +170,9 @@ def tfInt(brd):
     return newBrd
 
 def rootBoard(brd):
-    """ Returns a string representing a unique 'root' board for the given board
+    """ Returns a string representing a unique 'root' board for the given board.
+        This is because many different board positions are logically identical, just rotated or flipped
+        versions of a different board. This version matches those logically idential boards.
     """
     rootScore=0     #the "score" of the highest scoring board
     seqCount=0      #track the number of transforms so far
