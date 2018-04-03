@@ -59,18 +59,26 @@ def humanMove(brd):
     newBrd=""
     validMove=False
     while not validMove:
-        print("You are ", player)
+        print("You are ", player, end=". ")
         strMove = input("What is your move? (0-8): ")
-        move=int(strMove[0])
-        if move<0 or move>8 or brd[move] != " ":
-            print("Invalid move")
-        else:
-            validMove=True
-            for i in range(0,9):
-                if i == move:
-                    newBrd=newBrd + player
-                else:
-                    newBrd = newBrd + brd[i]
+        try:
+            move=int(strMove[0])
+            if move<0 or move>8 or brd[move] != " ":
+                print("Invalid move - enter a move between 0 and 8:")
+                printBrd("012345678")
+            else:
+                validMove=True
+                for i in range(0,9):
+                    if i == move:
+                        newBrd=newBrd + player
+                    else:
+                        newBrd = newBrd + brd[i]
+        except:
+            if strMove=='x':
+                printExperience()
+            else:
+                print("Invalid move - enter a move between 0 and 8:")
+                printBrd("012345678")
     return newBrd
 
 def isGameWon(brd):
