@@ -41,6 +41,24 @@
 import random       #for choosing random moves
 import collections  #gamelist needs to be an ordered dictionary
 
+def drawGrid():
+    print("Drawing Board")
+            
+def drawMove(player, position):
+    print("Drawing", player, "in position", position)
+
+def findLastMove(brd):
+    
+    global lastDrawnBoard
+
+    #draw any moves that haven't yet been drawn
+    for i in range(0,9):
+        if brd[i] != lastDrawnBoard[i]:
+            drawMove(brd[i],i)
+
+    #update the record of what has already been drawn
+    lastDrawnBoard = brd
+
 def printBrd(brd):
     """ Outputs the board represented by 'brd' to the screen"""
     print(brd[0],"|",brd[1],"|",brd[2], sep="")
@@ -67,6 +85,8 @@ def humanMove(brd):
             if move<0 or move>8 or brd[move] != " ":                    #move in correct range and not a square already taken?
                 print("Invalid move - enter a move between 0 and 8:")
                 printBrd("012345678")
+                print("")
+                printBrd(brd)
             else:
                 validMove=True
                 for i in range(0,9):                                    #if valid int, add the move to the board
@@ -80,6 +100,8 @@ def humanMove(brd):
             else:
                 print("Invalid move - enter a move between 0 and 8:")
                 printBrd("012345678")
+                print("")
+                printBrd(brd)
     return newBrd
 
 def isGameWon(brd):
@@ -287,10 +309,12 @@ def printExperience():
 # MAIN PROGRAM STARTS HERE
 # ========================
 
-X_Experience={}
-O_Experience={}
-gameCount=0
-computersTurn=False
+#Global Variables
+X_Experience={}             #This is the list of boards after X's move with votes showing how good each board situation is
+O_Experience={}             #This is the list of boards after O's move with votes showing how good each board situation is
+gameCount=0                 #How many games have been played? (how experienced is the computer?)
+computersTurn=False         #keeps track of who's turn it is
+lastDrawnBoard="         "  #This keeps track of which Os and Xs have already been drawn, so the program knows what to draw
 
 #play games over and over
 while True:
@@ -299,6 +323,8 @@ while True:
     board="         "
     GameList=collections.OrderedDict()
     printBrd("012345678")
+    drawGrid()                              #get the robot arm to draw the grid
+    lastDrawnBoard="         "              #the last drawn board was blank
     
     if computersTurn:
         print("\nStep aside human, I'm going first!")
@@ -321,6 +347,8 @@ while True:
         if isGameWon(board)!="N":           #check to see if the game is over
             break    
     
+        findLastMove(board)
+
     #when the game is over, declare the winner
     print("")
     gameResult = isGameWon(board)
