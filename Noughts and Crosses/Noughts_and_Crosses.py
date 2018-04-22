@@ -313,7 +313,8 @@ def printExperience():
 X_Experience={}             #This is the list of boards after X's move with votes showing how good each board situation is
 O_Experience={}             #This is the list of boards after O's move with votes showing how good each board situation is
 gameCount=0                 #How many games have been played? (how experienced is the computer?)
-computersTurn=False         #keeps track of who's turn it is
+computerGoesFirst=False     #who will go first next game?
+computersTurn=False         #keeps track of who's turn it is during a game
 lastDrawnBoard="         "  #This keeps track of which Os and Xs have already been drawn, so the program knows what to draw
 
 #play games over and over
@@ -325,6 +326,7 @@ while True:
     printBrd("012345678")
     drawGrid()                              #get the robot arm to draw the grid
     lastDrawnBoard="         "              #the last drawn board was blank
+    computersTurn=computerGoesFirst         #who's turn is it to go first?
     
     if computersTurn:
         print("\nStep aside human, I'm going first!")
@@ -363,5 +365,7 @@ while True:
     learnFromGame(GameList)                 #remember all the moves from the game for next time!
     gameCount = gameCount + 1
     print("Game Count = ", gameCount)       #how many games have been played?
+    
+    computerGoesFirst = not computerGoesFirst   #take turns at going first
 
     #printExperience()                       #display the experience lists (optional - uncomment if wanted)
