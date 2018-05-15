@@ -304,6 +304,22 @@ def printExperience():
         print(x," : ",O_Experience[x])
     print("")
 
+def saveExperience():
+    '''Saves the experience dictionary into a file called 'experience.txt'''
+
+    print("Saving Experience:")
+
+    expFile = open("experience.txt", "w")
+    expFile.write("Experience for X:\n")
+    for x in X_Experience:
+        expFile.write(x + " : " + str(X_Experience[x]) + "\n")
+
+    expFile.write("Experience for O:\n")
+    for o in O_Experience:
+        expFile.write(o + " : " + str(O_Experience[o]) + "\n")
+
+    expFile.close()
+
 
 # ========================
 # MAIN PROGRAM STARTS HERE
@@ -349,7 +365,7 @@ while True:
         if isGameWon(board)!="N":           #check to see if the game is over
             break    
     
-        findLastMove(board)
+        findLastMove(board)                #this finds the last move and gets the robot to draw it
 
     #when the game is over, declare the winner
     print("")
@@ -363,6 +379,7 @@ while True:
 
     print("")
     learnFromGame(GameList)                 #remember all the moves from the game for next time!
+    saveExperience()                        #save experience to file
     gameCount = gameCount + 1
     print("Game Count = ", gameCount)       #how many games have been played?
     

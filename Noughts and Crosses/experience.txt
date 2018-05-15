@@ -1,0 +1,7 @@
+Experience for X:
+    X     : 2
+O   XX    : 2
+OX  XO X  : 2
+Experience for O:
+O   X     : -2
+O   XX O  : -2
