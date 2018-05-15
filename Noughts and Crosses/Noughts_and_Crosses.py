@@ -97,6 +97,8 @@ def humanMove(brd):
         except:                                                         #do this if the input wasn't an int
             if strMove=='x':
                 printExperience()
+            elif strMove=="load":
+                loadExperience()
             else:
                 print("Invalid move - enter a move between 0 and 8:")
                 printBrd("012345678")
@@ -320,6 +322,12 @@ def saveExperience():
 
     expFile.close()
 
+def loadExperience():
+    '''Loads the experience from the file "experience.txt into the X_Experience and O_Experience'''
+    with open("experience.txt", "r") as expFile:
+        fileLines=expFile.readlines()
+    for line in fileLines:
+        print(line, end="")
 
 # ========================
 # MAIN PROGRAM STARTS HERE
