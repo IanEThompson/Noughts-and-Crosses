@@ -1,22 +1,22 @@
-Game Count=192
+Game Count=100
 Experience for X:
-X         : 96
-X   O   X : 16
-X X O X O : 32
+X         : 94
+X   O   X : 14
+X X O X O : 30
 XXXOO X O : 24
 XOX O X   : -2
 X   XO    : 20
 XO OX   X : 6
 XO  O X X : -2
-XXXOO O X : 4
+XXXOO O X : 2
 XO  X  OX : 4
 X O X     : 4
 XO  X O X : 14
 XO    X   : 2
 XXXO   O  : 6
-    X     : 34
-XO  X     : 48
-XO  XO  X : 10
+    X     : 28
+XO  X     : 42
+XO  XO  X : 8
 XOX X O   : 3
 XOX X OXO : 1
 XXOOXXXOO : 1
@@ -24,7 +24,7 @@ XX  O  OX : 4
 XXOOOX  X : -2
 X   X   O : 20
 XO  X X O : 28
-XXXOXOO   : 6
+XXXOXOO   : 4
 XX OO   X : -2
 XXOOO  XX : -2
  X        : 80
@@ -53,15 +53,15 @@ XX OOXX O : 1
 XXOOOXXXO : 1
 OX  XO X  : 12
 XX  O     : 31
-XXO O X   : 21
+XXO O X   : 19
 XXOOOXX   : 1
 XOO X  X  : 4
 XX OX OOX : 2
 OX  X     : 14
-XXO X  O  : -4
-XXO XX OO : -4
-XO  X OX  : 8
-XXO X OOX : 4
+XXO X  O  : -2
+XXO XX OO : -2
+XO  X OX  : 6
+XXO X OOX : 2
 XXX O O   : 4
 XXO O XOX : 5
 OX OX  X  : 18
@@ -77,7 +77,7 @@ OX  XX O  : 3
 XOOOXX X  : 1
 X O XX  O : 6
 XX OX OXO : 2
-XXXXOOO   : 10
+XXXXOOO   : 8
 XXX O XOO : 6
 XXO XO OX : 4
 X O X O X : 4
@@ -92,29 +92,27 @@ XXO OXXO  : 2
 XXXXOOOXO : 4
 XXXOO     : 8
 XXX O OXO : 2
-XOO X   X : 4
+XOO X   X : 2
 XOX X XOO : 2
 XXXXO O O : 2
 XXXOO XO  : 2
 XX  XOOXO : 2
 XXO X OXO : 2
-XXO O  X  : -2
-XX OXO    : 2
 Experience for O:
 X   O     : 1
-X O O   X : -32
+X O O   X : -30
 XOX O X O : -26
 XO  O   X : -5
 XOX O XO  : 6
 X    O    : -22
 X   XO O  : -6
-XOO O X X : -8
-XO  X  O  : -6
+XOO O X X : -6
+XO  X  O  : -4
 X O       : -12
 XO  X O   : -12
 XO   OX   : -2
- O  X     : -18
-XO  XO    : -10
+ O  X     : -12
+XO  XO    : -8
 XXO O  OX : -1
 XXOOOXO X : 2
 X       O : -8
@@ -148,9 +146,9 @@ OO  X  X  : -4
 XOO XO X  : -2
 OX        : 1
 OX  X  O  : 1
-XXO X  OO : 4
-XXO XXOOO : 4
-XOO X OX  : -4
+XXO X  OO : 2
+XXO XXOOO : 2
+XOO X OX  : -2
  X  O     : 1
 XX  O O   : -4
 OX OX     : -12
@@ -161,7 +159,7 @@ XXO O     : 1
 XXO OOX   : -6
 XX   O O  : -2
 XOO XX  O : -2
-XXO O XO  : -10
+XXO O XO  : -8
 XOOOXX    : -4
 X O X O   : -4
 X O X  O  : -2
@@ -177,11 +175,9 @@ OX XO     : -2
 XO  OX XO : -2
 XXO OXXOO : -4
 XX OO     : -8
-XOO X     : -4
+XOO X     : -2
 XXO O X O : -4
 XX  OO OX : -2
 XX  O OOX : -2
 X O XX OO : -2
 X O XXO O : -2
-XXO O OX  : 2
-XX OXO  O : -2

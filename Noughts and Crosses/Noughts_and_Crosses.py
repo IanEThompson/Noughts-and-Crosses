@@ -42,19 +42,18 @@ import random       #for choosing random moves
 import collections  #gamelist needs to be an ordered dictionary
 
 def drawGrid():
+    input("Clean board for new game. Press ENTER when ready")
     print("Drawing Board")
             
-def drawMove(player, position):
-    print("Drawing", player, "in position", position)
-
-def findLastMove(brd):
+def drawLastMove(brd):
     
     global lastDrawnBoard
 
     #draw any moves that haven't yet been drawn
     for i in range(0,9):
         if brd[i] != lastDrawnBoard[i]:
-            drawMove(brd[i],i)
+            print("Drawing", brd[i], "in position", i)
+            #drawMove(brd[i],i)
 
     #update the record of what has already been drawn
     lastDrawnBoard = brd
@@ -227,7 +226,7 @@ def findBestMove(brd):
         for m in nextMoves(brd):
             if isGameWon(m)=="O":                                    #if the move results in a win, just take it!
                 return m
-            if rootBoard(m) in O_Experience:                    #otherwise look for the best move in the0 experience list
+            if rootBoard(m) in O_Experience:                    #otherwise look for the best move in the experience list
                 if O_Experience[rootBoard(m)] > maxVotes:
                     bestMove=m
                     maxVotes = O_Experience[rootBoard(m)]
@@ -312,6 +311,9 @@ def saveExperience():
     print("Saving Experience:")
 
     expFile = open("experience.txt", "w")
+    
+    expFile.write("Game Count=" + str(gameCount) + "\n")
+        
     expFile.write("Experience for X:\n")
     for x in X_Experience:
         expFile.write(x + " : " + str(X_Experience[x]) + "\n")
@@ -324,10 +326,34 @@ def saveExperience():
 
 def loadExperience():
     '''Loads the experience from the file "experience.txt into the X_Experience and O_Experience'''
-    with open("experience.txt", "r") as expFile:
-        fileLines=expFile.readlines()
-    for line in fileLines:
-        print(line, end="")
+    global X_Experience
+    global O_Experience
+    global gameCount
+
+    X_Experience={}             #This is the list of boards after X's move with votes showing how good each board situation is
+    O_Experience={}             #This is the list of boards after O's move with votes showing how good each board situation is
+    gameCount=0                 #How many games have been played? (how experienced is the computer?)
+    loading=""
+
+    try:
+        with open("experience.txt", "r") as expFile:
+            fileLines=expFile.readlines()
+        for line in fileLines:
+            if line[:11] == "Game Count=":
+                gameCount=int(line[11:])
+                print("loading experience from", int(line[11:]), "games...")
+            elif line[:16] == "Experience for X":
+                loading="X"
+            elif line[:16] == "Experience for O":
+                loading="O"
+            elif line[10:11]==":":
+                brd,score = line.split(":")
+                if loading=="X":
+                    X_Experience[brd[:9]]=int(score)
+                elif loading=="O":
+                    O_Experience[brd[:9]]=int(score)
+    except IOError:
+        print("No experience file found")
 
 # ========================
 # MAIN PROGRAM STARTS HERE
@@ -341,6 +367,8 @@ computerGoesFirst=False     #who will go first next game?
 computersTurn=False         #keeps track of who's turn it is during a game
 lastDrawnBoard="         "  #This keeps track of which Os and Xs have already been drawn, so the program knows what to draw
 
+loadExperience()            #if an experience file called 'experience.txt' exists in the program directory, load it!
+
 #play games over and over
 while True:
 
@@ -351,7 +379,7 @@ while True:
     drawGrid()                              #get the robot arm to draw the grid
     lastDrawnBoard="         "              #the last drawn board was blank
     computersTurn=computerGoesFirst         #who's turn is it to go first?
-    
+        
     if computersTurn:
         print("\nStep aside human, I'm going first!")
     else:
@@ -373,7 +401,7 @@ while True:
         if isGameWon(board)!="N":           #check to see if the game is over
             break    
     
-        findLastMove(board)                #this finds the last move and gets the robot to draw it
+        drawLastMove(board)                #this finds the last move and gets the robot to draw it
 
     #when the game is over, declare the winner
     print("")
@@ -390,7 +418,7 @@ while True:
     saveExperience()                        #save experience to file
     gameCount = gameCount + 1
     print("Game Count = ", gameCount)       #how many games have been played?
-    
+        
     computerGoesFirst = not computerGoesFirst   #take turns at going first
 
     #printExperience()                       #display the experience lists (optional - uncomment if wanted)
